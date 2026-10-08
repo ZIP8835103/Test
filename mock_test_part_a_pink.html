@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mock Test Part A</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;padding:18px;background:#ffc1d6;color:#111;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.card{max-width:760px;margin:auto;background:#fff8fb;border-radius:22px;padding:22px;box-shadow:0 5px 20px #0002}
+h1{font-size:25px;color:#111;margin:0 0 8px}
+.progress{font-size:16px;color:#333;margin:10px 0 18px}
+.question{font-size:20px;font-weight:700;line-height:1.5;color:#111;margin-bottom:18px}
+.option{display:block;width:100%;margin:11px 0;padding:16px;border:2px solid #d38da7;border-radius:15px;background:#fff;color:#111;text-align:left;font-size:17px;font-weight:600;line-height:1.4}
+.option:active,.option.selected{background:#ffd8e6;border-color:#c2185b}
+.option:disabled{opacity:1}
+#next,.restart{margin-top:10px;background:#c2185b;color:#fff;border:0;border-radius:13px;padding:13px 22px;font-size:17px;font-weight:700}
+#next:disabled{background:#aaa}
+#next{float:right}
+.feedback{display:none;margin-top:16px;padding:14px;border-radius:13px;font-size:16px}
+.correct{display:block;background:#e4f7e7;color:#145b20}
+.wrong{display:block;background:#ffe5e5;color:#8b1515}
+.clear{clear:both}
+.result{text-align:center;color:#111}
+.score{font-size:46px;font-weight:800;color:#c2185b}
+</style>
+</head>
+<body>
+<div class="card"><h1>📝 MOCK TEST — PART A</h1><div id="app"></div></div>
+<script>
+const questions=[["What does skimming help a reader do?", ["Find one specific word", "Understand the general idea of a text quickly", "Memorize every sentence", "Read every word carefully"], 1], ["A nurse wants to find a patient’s telephone number on a long contact list. Which technique should she use?", ["Scanning", "Detailed reading", "Revision reading", "Annotation"], 0], ["Which situation requires detailed reading?", ["Looking at the title of a nursing article", "Finding a patient’s room number", "Checking instructions for giving medication", "Looking through the headings of a chapter"], 2], ["Why might a student use revision reading?", ["To find one number quickly", "To review information that they have already read", "To avoid reading the text", "To find the title of a book"], 1], ["A student quickly reads the headings, first sentences, pictures, and final paragraph of an article. What technique is this?", ["Scanning", "Skimming", "Detailed reading", "Annotation"], 1], ["A nursing student carefully reads each instruction in a procedure before performing it. Which technique is most appropriate?", ["Skimming", "Scanning", "Detailed reading", "Previewing"], 2], ["What should a reader do during the before-reading stage?", ["Write a final summary", "Prepare for the text and think about its purpose", "Answer all examination questions", "Memorize the entire text"], 1], ["Which activity is an example of before-reading?", ["Highlighting information while reading", "Writing a summary after reading", "Looking at the title and headings", "Answering comprehension questions"], 2], ["Which activity is usually done during reading?", ["Predicting the topic from the title", "Highlighting important information", "Choosing a textbook", "Writing a final conclusion"], 1], ["A student underlines important information while reading an article about patient safety. Which stage is this?", ["Before reading", "During reading", "After reading", "Free writing"], 1], ["Which activity is part of the after-reading stage?", ["Looking at the title", "Predicting what the article will discuss", "Writing a summary of the text", "Looking at the pictures before reading"], 2], ["How can reading stages help nursing students?", ["They help students understand and remember important information.", "They allow students to skip difficult information.", "They make detailed reading unnecessary.", "They allow students to read without understanding."], 0], ["Which action describes the Pointer Method?", ["Moving a finger or pen along the lines while reading", "Reading only the last paragraph", "Writing every word in a notebook", "Reading the text from the bottom to the top"], 0], ["Which material is generally suitable for practicing the Pointer Method?", ["A medication dosage that must be checked exactly", "A familiar English textbook passage", "A legal consent document", "An unfamiliar emergency instruction"], 1], ["What is one purpose of tracking and pacing?", ["To make reading slower", "To develop a steady reading rhythm and improve speed", "To memorize every medical word", "To avoid reading difficult texts"], 1], ["Which action can help a reader maintain a steady reading pace?", ["Moving a finger or pen smoothly under the words", "Stopping after every word", "Reading each sentence three times", "Looking away from the page frequently"], 0], ["Scanning is especially useful when a student wants to find:", ["The writer’s opinion about everything", "A specific name, date, number, or fact", "Every supporting detail", "The complete meaning of a paragraph"], 1], ["Why should nursing students be careful when using speed-reading techniques?", ["Reading speed is always more important than understanding.", "Accuracy and patient safety are more important than speed.", "Nursing information should always be skipped.", "Students should never read nursing materials quickly."], 1], ["What does analytical reading involve?", ["Reading without questioning the information", "Thinking critically about ideas and evidence", "Reading only the first sentence", "Copying the text into a notebook"], 1], ["What does re-reading mean?", ["Reading a text again for a particular purpose", "Reading only the title", "Searching for one patient’s name", "Reading a different book"], 0], ["What does integration mean when reading different sources?", ["Connecting information and ideas from different sources", "Ignoring information from other sources", "Copying one source without thinking", "Reading only one sentence"], 0], ["Which activity is an example of annotation?", ["Writing a short note beside an important idea", "Reading the title only", "Searching for a room number", "Closing the textbook after one paragraph"], 0], ["In an argument, what is the claim?", ["The main point the writer wants the reader to accept", "A spelling mistake", "The page number", "A picture in the text"], 0], ["A nursing student identifies the writer’s main claim and then finds evidence that supports it. What strategy is the student using?", ["Argument mapping", "Skimming", "Simple present writing", "Scanning"], 0], ["Which sentence uses a coordinating conjunction correctly?", ["The patient is tired, but she wants to walk.", "The patient is tired but.", "The patient because tired.", "The patient is tired, she wants to walk but."], 0]];
+let current=0,score=0;
+const app=document.getElementById("app");
+function render(){
+ if(current>=questions.length){
+  app.innerHTML=`<div class="result"><h2>🎉 Test Complete!</h2><div class="score">${score}/${questions.length}</div><p>คะแนน ${Math.round(score/questions.length*100)}%</p><button class="restart" onclick="current=0;score=0;render()">🔄 Restart</button></div>`;return;
+ }
+ const q=questions[current];
+ app.innerHTML=`<div class="progress">Question ${current+1} of ${questions.length}</div><div class="question">${q[0]}</div><div id="options"></div><div id="feedback" class="feedback"></div><button id="next" disabled>Next →</button><div class="clear"></div>`;
+ q[1].forEach((text,i)=>{
+  const b=document.createElement("button"); b.className="option"; b.textContent=String.fromCharCode(65+i)+". "+text;
+  b.onclick=()=>choose(i); document.getElementById("options").appendChild(b);
+ });
+ document.getElementById("next").onclick=()=>{current++;render();window.scrollTo(0,0)};
+}
+function choose(i){
+ const q=questions[current], buttons=document.querySelectorAll(".option");
+ buttons.forEach(b=>b.disabled=true); buttons[i].classList.add("selected");
+ const f=document.getElementById("feedback");
+ if(i===q[2]){score++;f.className="feedback correct";f.innerHTML="✅ Correct!";}
+ else{f.className="feedback wrong";f.innerHTML="❌ Incorrect — Correct answer: "+String.fromCharCode(65+q[2]);}
+ document.getElementById("next").disabled=false;
+}
+render();
+</script>
+</body>
+</html>
